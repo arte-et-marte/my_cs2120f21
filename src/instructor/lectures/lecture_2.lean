@@ -41,6 +41,7 @@ axiom eq_subst :
 def eq_3_3 : Prop := 3 = 3
 def eq_n_3 (n : ℕ) : Prop := n = 3
 
+
 -- predicates applied to values yield propositions
 #reduce eq_n_3 2
 #reduce eq_n_3 3

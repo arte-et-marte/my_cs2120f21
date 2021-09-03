@@ -263,7 +263,7 @@ Give a quasi-formal English language "proof"
 of the proposition that 2 = 2.
 
 Theorem: 2 = 2.
-Proof: [your answer here]
+Proof: By the reflexive axiom of equality.
 
 -/
 
@@ -275,8 +275,7 @@ the proposition, 2 = 2. (See above for a good
 example to follow!)
 -/
 
--- answer here
-
+example : 2 = 2 := @eq.refl ℕ 2
 
 /-
 EXERCISE #3.
@@ -288,7 +287,7 @@ A. Every time the bell has rung, I've gotten a
 nugget. The bell just rung, so I'm gonna get a
 nugget! (Dogs usually say "gonna," by the way).
 
-answer: 
+answer: inductive
 
 B. The "clone repo into container" command did
 nothing. That was clearly wrong. I search around
@@ -298,12 +297,12 @@ have git installed. Ah ha, I thought. That could
 be it. I'll do the obvious experiment and install
 git and see if it works. (It did, by the way.)
 
-answer: 
+answer: abductive
 
 C. It's true that it's raining, and it's true
 that the streets are wet, so it must be true 
 that "it's raining *and* the streets are wet."
 
-answer: 
+answer: deductive
 -/
 end cs2120
