@@ -30,7 +30,7 @@ axiom eq_subst :
   ∀ (T : Type)      -- if T is a type
     (P : T → Prop)  -- and P is a property of T objects
     (x y : T)       -- and x and y are T objects
-    (e : x = y)     -- and you have a proof that x = y
+    (e : x = y)     -- and you have a proof that x = y (you can tell it's an elimination rule bc a proof is taken as an arg.)
     (px : P x),     -- and you have a proof that x has property P
   P y               -- then you can deduce (and get a proof) of P y
 
@@ -74,6 +74,13 @@ PROOFS: From conjectures to theorems
 
 /-
 Proofs: equality is symmetric.
+
+def eq_symm : Prop := 
+  ∀ (T : Type) 
+    (x y : T), 
+    x = y → 
+    y = x 
+trying to prove this prop./def.
 -/
 
 example : eq_symm :=
@@ -128,10 +135,20 @@ Note: Lean defines these rules as
 /-
 Practice
 -/
-
+/-top level logical construct: it's a for-all prop./statement, for all types T something, (1) assume I'm given some type T, assume I'm given objects of T, show yada yada,
+below is not quite a transitivity prop.-/
 example : ∀ (T : Type) (x y z : T), x = y → y = z → z = x :=
 begin
-
+  assume T,
+  /-assume x y z, /-using the for-all rule again to assume x y z-/-/
+  assume (x : T),
+  assume (y : T),
+  assume (z : T),
+  /-assume T x y z-/
+  /- now we have an implies prop. no longer a for-all prop.-/
+  assume h1 h2,
+  apply eq.symm _, /-backwards reasoning, need to apply symm to x = z-/  
+  apply eq.trans h1 h2,
 end
 
 /-
