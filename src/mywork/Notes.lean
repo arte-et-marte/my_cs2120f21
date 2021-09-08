@@ -134,3 +134,11 @@ theorem z_equals_x:
     rw p1,
     rw p2
   end
+
+/-
+9.8.2021 Notes:
+
+Intro rule (helps to build a proof) in Python - returns thing of given type, elim rule
+(helps to use a proof (e.g., by re-writing it)) in Python - takes that thing as an arg. =: intro rule (eq.refl), elim
+rule (eq.subst), what is the intro rule for different logical connectives? (See lecture 4 file).
+-/
