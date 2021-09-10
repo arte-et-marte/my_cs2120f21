@@ -140,3 +140,11 @@ end
 end
 >>>>>>> 138d43446c443c1d15cd2f17fb607c4f0dff702f
 -/
+
+example : ∀ (P Q : Prop), P ∧ Q → Q ∧ P :=
+  begin
+    assume P Q h,
+    have p : P := and.elim_left h,
+    have q : Q := and.elim_right h,
+    exact and.intro q p,
+  end

@@ -153,3 +153,8 @@ Lean: and.intro - func that takes an arg of type P, takes an arg of type Q, retu
 (an intro rule bc it returns a proof)
 and has two elim rules, one for left proof, one for right proof.
 -/
+
+/-
+9.10.2021 Notes:
+GitHub ID, statement: confidence lvl
+-/
