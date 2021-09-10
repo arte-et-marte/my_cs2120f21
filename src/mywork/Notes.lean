@@ -141,4 +141,15 @@ theorem z_equals_x:
 Intro rule (helps to build a proof) in Python - returns thing of given type, elim rule
 (helps to use a proof (e.g., by re-writing it)) in Python - takes that thing as an arg. =: intro rule (eq.refl), elim
 rule (eq.subst), what is the intro rule for different logical connectives? (See lecture 4 file).
+
+lect 5
+
+AND (logical connective):
+(P Q : Prop)
+P ∧ Q (P and Q)
+when is this prop true? When p is true and q is true. Need two proofs, for each prop. Pair of proofs is the proof for
+the bigger prop.
+Lean: and.intro - func that takes an arg of type P, takes an arg of type Q, returns a proof of P ∧ Q.
+(an intro rule bc it returns a proof)
+and has two elim rules, one for left proof, one for right proof.
 -/
