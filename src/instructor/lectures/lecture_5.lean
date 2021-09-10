@@ -48,7 +48,7 @@ For P → Q (if P is true then Q must also be true)
 kind of function, to any proof of P to derive a proof of Q!
 -/
 
-theorem foo : ∀ (x : ℕ), x = 0 → x + 1 = 1 := 
+lemma foo : ∀ (x : ℕ), x = 0 → x + 1 = 1 := 
 begin
   assume x h,
   rw h,
@@ -111,16 +111,32 @@ end
 theorem bar : 0 = 0 ∧ 1 = 1 :=
 begin
   apply and.intro (eq.refl 0) (eq.refl 1),
-end
+end 
 
 #check bar
+
 #check and.elim_left bar
 #check and.elim_right bar
 
 theorem and_commutative : ∀ (P Q : Prop), P ∧ Q → Q ∧ P :=
 begin
+  assume P Q h,
+  apply and.intro _ _,
+  apply and.elim_right h,
+  apply and.elim_left h,
+end
+
+/-
     assume P Q h,
     apply and.intro _ _, /-proof of p and proof q individually-/
     apply and.elim_right h, /-gives back q from p ∧ q-/
     apply and.elim_left h, /-gives us p from h-/
 end
+=======
+  assume P Q h,
+  apply and.intro _ _,
+  apply and.elim_right h,
+  apply and.elim_left h,
+end
+>>>>>>> 138d43446c443c1d15cd2f17fb607c4f0dff702f
+-/
