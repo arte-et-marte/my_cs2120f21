@@ -11,6 +11,9 @@ axioms of equality, but either of the theorems about properties
 of equality that we have proven. Hint: There's something about
 this question that makes it much easier to answer than it might
 at first appear.
+
+By the equality theorem of symmetry, we are able to rewrite w = z to z = w. The equality theorem of symmetry is proven
+by the axiom of substitutability of equals and the axiom of reflexivity.
 -/
 
 /- #2
@@ -21,8 +24,9 @@ is prop_1. The type of the value is Prop (which is the type of
 all propositions in Lean). 
 -/
 
-def prop_1 : Prop := 
-  _
+def prop_1 : Prop :=
+  ∀ (T : Type) (x y z w : T) (p1 : x = y) (p2 : y = z) (p3 : w = z), z = w
+
 
 /- #3 (extra credit)
 Give a formal proof of the proposition from #2 by filling in
@@ -33,7 +37,9 @@ again, called eq.refl, eq.subst, eq.symm, eq.trans.
 
 theorem prop_1_proof : prop_1 := 
 begin
-  _
+  assume T x y z w e1 e2 e3,
+  apply eq.symm,
+  exact e3,
 end
 
 /-
@@ -45,6 +51,8 @@ Give a very brief explanation in English of the introduction
 rule for ∀. For example, suppose you need to prove (∀ x, P x);
 what do you do? (I'm being a little informal in leaving out the
 type of X.) 
+
+Assume an arbitrary object x of type T, then show that x has a property P of type T.
 -/
 
 /- #5
@@ -53,6 +61,8 @@ Suppose you have a proof, let's call it pf, of the proposition,
 Write an expression then uses the elimination rule for ∀ to get
 such a proof. Complete the answer by replacing the underscores
 in the following expression: ( _ _ ). 
+
+apply pf t
 -/
 
 /-
@@ -76,7 +86,7 @@ Hint: put parenthesis around "n + 1" in your answer.
 -/
 
 def successor_of_even_is_odd : Prop := 
-  _
+  ∀ (n : ℕ), n % 2 = 0 → (n + 1) % 2 = 1
 
 /- #7
 Suppose that "its_raining" and "the_streets_are_wet" are
@@ -88,7 +98,7 @@ by filling in the hole
 
 axioms (raining streets_wet : Prop)
 
-axiom if_raining_then_streets_wet : _
+axiom if_raining_then_streets_wet : raining → streets_wet
   
 
 /- #9
@@ -102,7 +112,11 @@ you are asked to use the elimination rule for →.
 axiom pf_raining : raining
 
 example : streets_wet :=
- _
+begin
+  apply if_raining_then_streets_wet pf_raining,
+end
+
+
 
 /- 
 AND: ∧
@@ -143,12 +157,16 @@ allows you to give a name to a new value in the middle of a
 proof script.
 -/
 
-theorem and_associative : 
+theorem and_associative :
   ∀ (P Q R : Prop),
   (P ∧ (Q ∧ R)) → ((P ∧ Q) ∧ R) :=
 begin
   intros P Q R h,
   have p : P := and.elim_left h,
+  have qr : Q ∧ R := and.elim_right h,
+  have q : Q := and.elim_left qr,
+  have r : R := and.elim_right qr,
+  apply and.intro (and.intro p q) r,
 end
 
 /- #11
@@ -162,10 +180,10 @@ proof, let's call it p_qr, of (P ∧ (Q ∧ R)) [by
 application of ∧ and → introduction.] What now
 remains to be proved is ((P ∧ Q) ∧ R). We can
 construct a proof of this proposition by applying
-_____ to a proof of (P ∧ Q) and a proof of R.
+__and introduction rule___ to a proof of (P ∧ Q) and a proof of R.
 What remains, then, is to obtain these proofs.
 But this is easily done by the application of
-____ to ____. QED. 
+__the and elimination rule__ to __pq_r__. QED. 
 -/
 
 
