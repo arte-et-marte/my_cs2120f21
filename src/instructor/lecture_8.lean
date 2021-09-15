@@ -1,3 +1,23 @@
+/-Reviewing how to formally prove that and is associative-/
+theorem and_associative : ∀ (P Q R: Prop), (P ∧ Q) ∧ R → P ∧ (Q ∧ R) :=
+begin
+  assume P Q R,
+  /-what remains to be proved is the implication-/
+  assume h, /-h is the proof of (P ∧ Q) ∧ R (the left side of the implication)-/ /-and is right associative-/
+  /- exact and.elim_left (and.elim_left h), -/
+  /-or replace line 8 with lines 10 and 11-/
+  have pq : P ∧ Q := and.elim_left h,
+  have p : P := and.elim_left pq, /-to get a proof of P-/
+  have q : Q := and.elim_right pq,
+  have r : R := and.elim_right h,
+  exact and.intro p (and.intro q r),
+  /-or replace line 13 with lines 15 and 16
+  apply and.intro _ (and.intro q r)
+  exact p-/
+end /-apply can take placeholders; exact can't-/
+
+/-Start of lecture notes-/
+
 /-
 The or connective, ∨, in predicate logic
 join any two propositions, P, Q, into a
@@ -44,7 +64,7 @@ In Lean, the rules are called or.intro_left
 and or.intro_right.
 -/
 
-#check @or.intro_left
+#check @or.intro_left /-curly braces=a proposition that can be inferred. (?)-/
 #check @or.intro_right
 
 /-
@@ -59,10 +79,17 @@ Let's formalize our example in Lean.
 -/
 
 axioms (Joe_is_tall Joe_chews_gum : Prop)
-axiom jcg: Joe_chews_gum
+axiom jcg: Joe_chews_gum /-assuming a proof, jcg, of Joe_chews_gum-/
 
 theorem jcg_or_jit: Joe_chews_gum ∨ Joe_is_tall :=
   or.intro_left Joe_is_tall jcg 
+
+/-
+theorem jcg_or_jit: Joe_chews_gum ∨ Joe_is_tall :=
+begin
+  exact or.intro_left Joe_is_tall jcg /-or apply; it works too.-/
+end
+-/
 
 /-
 Exercise: Formalize our second version of this
