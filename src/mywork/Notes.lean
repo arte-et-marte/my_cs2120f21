@@ -158,3 +158,68 @@ and has two elim rules, one for left proof, one for right proof.
 9.10.2021 Notes:
 GitHub ID, statement: confidence lvl
 -/
+
+/-
+9.13.2021 Notes
+#1 - How do I write a conditional?
+axiom keyword (sg.), axioms (pl.) - props. that assume true.
+-/
+namespace implies
+axioms (P Q : Prop)
+def if_P_is_true_then_so_is_Q : Prop := P → Q
+-- assume P is true
+axiom p : P
+-- assume we have a proof of P (p)
+
+axiom pq : P → Q
+-- = axiom pq : if_P_is_true_then_so_is_Q
+-- assume that we have a proof of P → Q
+
+/-
+implies rules:
+→ intro rule 
+assume premise (is true), show conclusion 
+→ elim rule
+apply implies relationship (proof of relationship, pq, for example) to premise
+-/
+
+
+#check p
+#check pq
+#check (pq p) /- → elim rule on p-/
+end implies
+
+/-Suppose that P and Q are propositions and you know that P → Q and that P are both true. Show that Q is true.begin
+
+Proof: Apply the truth of P →Q to the truth of P to derive the truth of Q. / By the elimination rule for → with pq applied
+to p.-/
+
+/-
+∀ Rules:
+-/
+namespace all
+axioms (T : Type) (pOfT : T → Prop ) (t : T) (a : ∀ (x : T), pOfT x)
+
+-- Does t have property P? Yes, bc it is of Type T (∀ move from general statement about every object of a kind to a statement about a specific object of that kind)
+end all
+
+-- elim rule: assume a forall statement about a type of objects is true and assume that you have an object of that type, apply that statement to that object to prove that that object has the property of that type.
+-- takes an object of a type, returns a proof for that object having that type's property
+
+/-
+-/
+axioms (P Q : Prop)
+/-
+Want a proof of P ∧ Q.-/
+
+/-Implies: IF P is true, THEN, Q is true.
+  And: P is true and Q is also true. (an ordered pair of proofs)-/
+/-
+#2 - Elimination rules.
+
+#3 - Rules for ∀ vs →.
+
+#4 - have in Lean.
+
+#5 - 
+-/

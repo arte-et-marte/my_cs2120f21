@@ -1,24 +1,19 @@
 /-
-secret code name: groundhog
-Yashavi Prakash, yp3ez, github url: https://github.com/yashaviprakash/cs2120f21.git
-Jacqueline Chao, jc7rw, github url: https://github.com/arte-et-marte/my_cs2120f21.git
--/
-
-/-
 EQUALITY
 -/
 
 /- #1 
 Suppose that x, y, z, and w are arbitrary objects of some type, 
 T; and suppose further that we know (have proofs of the facts) 
-that x = y, y = z, and w = z. Give a very, very short English 
+that  x = y, y = z, and w = z. Give a very, very short English 
 proof of the conjecture that z = w. You can use not only the 
 axioms of equality, but either of the theorems about properties 
 of equality that we have proven. Hint: There's something about
 this question that makes it much easier to answer than it might
 at first appear.
-Answer: By the theorem that states that equality is symmetric, we can prove that
-z=w by the axiom of substutability and the axiom of reflexivity. QED.
+
+By the equality theorem of symmetry, we are able to rewrite w = z to z = w. The equality theorem of symmetry is proven
+by the axiom of substitutability of equals and the axiom of reflexivity.
 -/
 
 /- #2
@@ -29,8 +24,9 @@ is prop_1. The type of the value is Prop (which is the type of
 all propositions in Lean). 
 -/
 
-def prop_1 : Prop := 
- ∀ (T: Type) (x y z w: T) (e1: x = y) (e2: y = z) (e3: w = z), z = w 
+def prop_1 : Prop :=
+  ∀ (T : Type) (x y z w : T) (p1 : x = y) (p2 : y = z) (p3 : w = z), z = w
+
 
 /- #3 (extra credit)
 Give a formal proof of the proposition from #2 by filling in
@@ -41,9 +37,9 @@ again, called eq.refl, eq.subst, eq.symm, eq.trans.
 
 theorem prop_1_proof : prop_1 := 
 begin
- assume T x y z w e1 e2 e3,
- apply eq.symm,
- exact e3,
+  assume T x y z w e1 e2 e3,
+  apply eq.symm,
+  exact e3,
 end
 
 /-
@@ -55,7 +51,8 @@ Give a very brief explanation in English of the introduction
 rule for ∀. For example, suppose you need to prove (∀ x, P x);
 what do you do? (I'm being a little informal in leaving out the
 type of X.) 
-Answer: Assume arbritary x of type T, then show that x shares property P of all types T.
+
+Assume an arbitrary object x of type T, then show that x has a property P of type T.
 -/
 
 /- #5
@@ -64,11 +61,13 @@ Suppose you have a proof, let's call it pf, of the proposition,
 Write an expression then uses the elimination rule for ∀ to get
 such a proof. Complete the answer by replacing the underscores
 in the following expression: ( _ _ ). 
-Answer: apply pf t
+
+apply pf t
 -/
 
 /-
 IMPLIES: →
+
 In the "code" that follows, we define two predicates, each 
 taking one natural number as an argument. We call them ev and 
 odd. When applied to any value, n, ev yields the proposition 
@@ -86,7 +85,8 @@ your answer by filling the hole in the following definition.
 Hint: put parenthesis around "n + 1" in your answer.
 -/
 
-def successor_of_even_is_odd : Prop := ∀ (n: ℕ), n % 2 = 0 → (n+1) % 2 = 1 
+def successor_of_even_is_odd : Prop := 
+  ∀ (n : ℕ), n % 2 = 0 → (n + 1) % 2 = 1
 
 /- #7
 Suppose that "its_raining" and "the_streets_are_wet" are
@@ -99,7 +99,7 @@ by filling in the hole
 axioms (raining streets_wet : Prop)
 
 axiom if_raining_then_streets_wet : raining → streets_wet
- 
+  
 
 /- #9
 Now suppose that in addition, its_raining is true, and
@@ -113,8 +113,10 @@ axiom pf_raining : raining
 
 example : streets_wet :=
 begin
- apply if_raining_then_streets_wet pf_raining,
+  apply if_raining_then_streets_wet pf_raining,
 end
+
+
 
 /- 
 AND: ∧
@@ -130,15 +132,15 @@ the introduction rules for ∀ and →). In this context, we
 them p, a proof of P, and q, a proof of Q. With these in
 hand, we then apply the introduction rule for ∧ to put 
 them back together into a proof of (Q ∧ P). We give you
-a formal version of this proof as a reminder, next. 
+a formal version of this proof as a reminder, next.  
 -/
 
 theorem and_commutative : ∀ (P Q : Prop), P ∧ Q → Q ∧ P :=
 begin
- assume P Q pq,
- apply and.intro _ _,
- exact (and.elim_right pq),
- exact (and.elim_left pq),
+  assume P Q pq,
+  apply and.intro _ _,
+  exact (and.elim_right pq),
+  exact (and.elim_left pq),
 end
 
 /-
@@ -156,41 +158,32 @@ proof script.
 -/
 
 theorem and_associative :
- ∀ (P Q R : Prop),
- (P ∧ (Q ∧ R)) → ((P ∧ Q) ∧ R) :=
+  ∀ (P Q R : Prop),
+  (P ∧ (Q ∧ R)) → ((P ∧ Q) ∧ R) :=
 begin
- intros P Q R h,
- have p : P := and.elim_left h,
- have qr : Q ∧ R := and.elim_right h,
- have q : Q := and.elim_left qr,
- have r : R := and.elim_right qr,
- apply and.intro (and.intro p q) r,
+  intros P Q R h,
+  have p : P := and.elim_left h,
+  have qr : Q ∧ R := and.elim_right h,
+  have q : Q := and.elim_left qr,
+  have r : R := and.elim_right qr,
+  apply and.intro (and.intro p q) r,
 end
 
 /- #11
 Give an English language proof of the preceding
 theorem. Do it by finishing off the following
 partial "proof explanation."
+
 Proof. We assume that P, Q, and R are arbitrary 
 but specific propositions, and that we have a
 proof, let's call it p_qr, of (P ∧ (Q ∧ R)) [by
 application of ∧ and → introduction.] What now
 remains to be proved is ((P ∧ Q) ∧ R). We can
 construct a proof of this proposition by applying
-_____ to a proof of (P ∧ Q) and a proof of R.
+__and introduction rule___ to a proof of (P ∧ Q) and a proof of R.
 What remains, then, is to obtain these proofs.
 But this is easily done by the application of
-____ to ____. QED. 
-Answer: We assume that P, Q, and R are arbitrary 
-but specific propositions, and that we have a
-proof, let's call it p_qr, of (P ∧ (Q ∧ R)) [by
-application of ∧ and → introduction.] What now
-remains to be proved is ((P ∧ Q) ∧ R). We can
-construct a proof of this proposition by applying
-"the and introduction rule" to a proof of (P ∧ Q) and a proof of R.
-What remains, then, is to obtain these proofs.
-But this is easily done by the application of
-"the and elimination rule" to "pq_r". QED. 
+__the and elimination rule__ to __pq_r__. QED. 
 -/
 
 
