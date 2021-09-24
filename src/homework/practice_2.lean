@@ -19,71 +19,65 @@ A proof cannot be constructed for false.
 -/
 
 -- #3
-example : ∀ (P : Prop), P ∨ P ↔ P := -- P or P implies P AND P implies P or P
+example : ∀ (P : Prop), P ∨ P ↔ P :=
 begin
   assume P,
-  apply iff.intro _ _, -- two proofs, for both directions
-  -- forward
-    assume porp, --using implies intro rule...assume we have premise
-    -- look  at  (prove) both cases, how we use a proof of a disjunction
-    apply or.elim porp,
-    -- left disjunct is true
-    assume p, /-to prove P → P-/
-    exact p,
-    -- right disjunct is true
-    assume p,
-    exact p,
-  -- backward
+  apply iff.intro _ _,
+  -- forwards
+  assume p_or_p,
+  apply or.elim p_or_p,
   assume p,
-  exact or.intro_right P p
+  exact p,
+  assume p,
+  exact p,
+  -- backwards
+  assume p,
+  exact or.intro_left P p,
 end
--- p or p is true, then case analysis left and right which are p is t / forward implication only true if prev is met
--- now for backwards dir
 /-
-First, we assume that we have a arbitrary proposition,
-P, and apply the "ifandonlyif" introduction rule to
-obtain the two proofs that we need - one for each
-direction.
-
-The proof P ∨ P → P is begun by applying the "implies"
-introduction rule, by which we assume that the left-hand
-side of our proposition is true. To this, we then apply
-the "or" elimation rule, which allows us to use our proof
-of the aforementioned disjunction to perform case
-analysis. For the first case, we assume that P is true
-("implies" introduction rule) and apply that proof/truth.
-We do the same for the second case.
-
-The proof of P → P ∨ P is also begun with the "implies"
-introduction rule, by which we assume that we have a
-proof of P. We then use this proof of P and the
-proposition P with the "or" introduction rule to obtain
-the needed proof of P.-/
-
--- assume we have a proof of P, p
+To prove the provided proposition, first assume that
+we have some proposition, P. Then, apply the if-and-
+only-if introduction rule to the two proofs that it
+requires. The first proof that it requires is that of
+the forwards direction implies proposition, P ∨ P → P.
+The second proof that it requires is that of the
+backwards direction implies proposition, P → P ∨ P.
+To acquire the first proof, begin by assuming that
+the premise of the proposition is true. Then, apply
+the or elimination rule to this assumed proof. With
+this, perform case analysis. For both cases, assume
+that there is a proof of P, and then, exact (or apply)
+that proof. To get the second proof, first assume P,
+then use the left introduction rule on our assumed
+proof of P and the proposition P.
+-/
 
 -- #4
 example : ∀ (P : Prop), P ∧ P ↔ P :=
 begin
   assume P,
   apply iff.intro _ _,
-  -- forward
+  -- forwards
   assume pandp,
   apply and.elim_left pandp,
-  -- backward
-  assume p, -- implies intro rule is just assuming the premise is true
+  -- backwards
+  assume p,
   apply and.intro p p,
 end
 /-
-Paste.
-
-The proof of P ∧ P → P is begun by assuming that P ∧ P
-is true through the "implies" introduction rule. With
-this, we may start working on our proof of P. We prove
-P by applying the left "and" elimination rule on our
-proof of P ∧ P, pandp, which gives to us a proof of P.
-
-The proof of P → P ∧ P is started by assuming that P is
+To prove the provided proposition, first assume that
+we have some proposition, P. Then, apply the if-and-
+only-if introduction rule to the two proofs that it
+requires. The first proof that it requires is that of
+the forwards direction implies proposition. The
+second proof that it requires is that of the
+backwards direction implies proposition. The proof of
+P ∧ P → P is begun by assuming that P ∧ P is true
+through the "implies" introduction rule. With this,
+we may start working on our proof of P. We prove P by
+applying the left "and" elimination rule on our proof
+of P ∧ P, pandp, which gives to us a proof of P. The
+proof of P → P ∧ P is started by assuming that P is
 true. To prove an "and" proposition, we need both sides
 of the proposition to be true, so we apply the "and"
 introduction rule to the proofs of P.
@@ -94,26 +88,31 @@ example : ∀ (P Q : Prop), P ∨ Q ↔ Q ∨ P :=
 begin
   assume P Q,
   apply iff.intro _ _,
-  -- forward
+  -- forwards
   assume porq,
   apply or.elim porq,
   assume p,
   apply or.intro_right Q p,
   assume q,
   apply or.intro_left P q,
-  -- backward
-  assume qorp, -- using the implies logical connective intro rule (simply assuming that the left side of your proposition is true)
-  apply or.elim qorp, -- to prove that Q ∨ P → P ∨ Q, I need either Q to be true OR P to be true. I have to SHOW that that can be the case by proving each case. (Case analysis)
+  -- backwards
+  assume qorp,
+  apply or.elim qorp,
   assume q,
   apply or.intro_right P q,
   assume p,
   apply or.intro_left Q p,
 end
 /-
-Paste.
-
-The proof of P ∨ Q → Q ∨ P starts by assuming that our
-P ∨ Q proposition is true ("implies" introduction rule).
+To prove the provided proposition, first assume that
+we have some proposition, P. Then, apply the if-and-
+only-if introduction rule to the two proofs that it
+requires. The first proof that it requires is that of
+the forwards direction implies proposition. The
+second proof that it requires is that of the
+backwards direction implies proposition. The proof of
+P ∨ Q → Q ∨ P starts by assuming that our P ∨ Q
+proposition is true ("implies" introduction rule).
 We must then apply the "or" elimination rule to our
 proof of the aforementioned proposition to perform case
 analysis, where we show that in either case (P is true
@@ -122,17 +121,15 @@ case we assume P, and to get our proof of the larger
 "or" proposition we use the right "or" introduction rule
 on our proposition Q and our assumed P. For the second
 case we assume Q and use the left "or" introduction rule
-on our proposition P and our assumed Q.
-
-The proof of Q ∨ P → P ∨ Q begins by assuming our
-premise. The "or" elimination rule is used on our
-(assumed) proof of the premise. With that, we start on
-our first case by assuming a proof of Q and generating
-the needed proof with the right "or" introduction rule
-on the proposition P and the proof of Q. We account
-for the second case by assuming a proof of P and using
-the left "or" introduction rule on the proposition Q
-and our proof of P.
+on our proposition P and our assumed Q. The proof of
+Q ∨ P → P ∨ Q begins by assuming our premise. The "or"
+elimination rule is used on our (assumed) proof of the
+premise. With that, we start on our first case by assuming
+a proof of Q and generating the needed proof with the
+right "or" introduction rule on the proposition P and the
+proof of Q. We account for the second case by assuming a
+proof of P and using the left "or" introduction rule on
+the proposition Q and our proof of P.
 -/
 
 -- #6
@@ -140,38 +137,43 @@ example : ∀ (P Q : Prop), P ∧ Q ↔ Q ∧ P :=
 begin
   assume P Q,
   apply iff.intro _ _,
-  -- forward
+  -- forwards
   assume pandq,
   -- now, to prove Q ∧ P, I need a proof of Q AND a proof of P
   apply and.intro _ _,
   apply and.elim_right pandq, -- fills in the first slot above with a proof of Q
   apply and.elim_left pandq, -- fills in the second slot above with a proof of P
-  -- backward
+  -- backwards
   assume qandp, -- assuming that the left side of my proposition is true (the proposition: Q ∧ P → P ∧ Q)
   apply and.intro _ _,
   apply and.elim_right qandp,
   apply and.elim_left qandp,
 end
 /-
-Paste.
-
-To prove that if P ∧ Q, then Q ∧ P, first assume that
-P ∧ Q is true by the "implies" introduction rule. To
-prove an "and" proposition, we need to have two proofs -
-one for each side of the "and". As such, we use the
-right "and" elimination rule to get a proof of Q and the
-left "and" elimination rule to get a proof of P. The "and"
+To prove the provided proposition, first assume that
+we have some proposition, P. Then, apply the if-and-
+only-if introduction rule to the two proofs that it
+requires. The first proof that it requires is that of
+the forwards direction implies proposition. The
+second proof that it requires is that of the
+backwards direction implies proposition. To prove that
+if P ∧ Q, then Q ∧ P, first assume that P ∧ Q is true
+by the "implies" introduction rule. To prove an "and"
+proposition, we need to have two proofs - one for each
+side of the "and". As such, we use the right "and"
+elimination rule to get a proof of Q and the left "and"
+elimination rule to get a proof of P. The "and"
 introduction rule uses these two proofs to give us a proof
-of the larger "and" proposition, Q ∧ P.
-
-Proving that if Q ∧ P, then P ∧ Q requires that we first
-assume that Q ∧ P is true (we have a proof of this). We
-follow a similar process to the one above by using the
-right "and" elimination rule to get a proof of P from our
-assumed proof of the premise and the left "and"
-elimination rule to get a proof of Q. The "and"
-introduction rule takes our proof of P and our proof of Q
-to spit out our proof of P ∧ Q.-/
+of the larger "and" proposition, Q ∧ P. Proving that if
+Q ∧ P, then P ∧ Q requires that we first assume that
+Q ∧ P is true (we have a proof of this). We follow a
+similar process to the one above by using the right "and"
+elimination rule to get a proof of P from our assumed
+proof of the premise and the left "and" elimination rule
+to get a proof of Q. The "and" introduction rule takes
+our proof of P and our proof of Q to spit out our proof
+of P ∧ Q.
+-/
 
 -- #7
 example : ∀ (P Q R : Prop), P ∧ (Q ∨ R) ↔ (P ∧ Q) ∨ (P ∧ R) :=
@@ -180,7 +182,7 @@ example : ∀ (P Q R : Prop), P ∧ (Q ∨ R) ↔ (P ∧ Q) ∨ (P ∧ R) :=
 begin
   assume P Q R,
   apply iff.intro _ _,
-  -- forward
+  -- forwards
   assume pqr,
   have p : P := and.elim_left pqr,
   have qr : Q ∨ R := and.elim_right pqr,
@@ -189,7 +191,7 @@ begin
   apply or.intro_left (P ∧ R) (and.intro p q),
   assume r,
   apply or.intro_right (P ∧ Q) (and.intro p r),
-  -- backward
+  -- backwards
   assume pandq_or_pandr,
   apply and.intro _ _,
   apply or.elim pandq_or_pandr, -- before: goals were to provide a proof of P and a proof of Q ∨ R; now: get a proof of p from the sub-and props.
@@ -207,9 +209,14 @@ begin
   apply or.intro_right Q (and.elim_right pandr),
 end
 /-
-Paste.
-
-P ∧ (Q ∨ R) → (P ∧ Q) ∨ (P ∧ R) by the use of the "implies"
+To prove the provided proposition, first assume that
+we have some proposition, P. Then, apply the if-and-
+only-if introduction rule to the two proofs that it
+requires. The first proof that it requires is that of
+the forwards direction implies proposition. The
+second proof that it requires is that of the
+backwards direction implies proposition. P ∧ (Q ∨ R)
+→ (P ∧ Q) ∨ (P ∧ R) by the use of the "implies"
 introduction rule, which assumes our premise is true. Given
 this proof, we may have an additional proof of P, which is
 obtained by using the left "and" elimination rule, and a
@@ -223,9 +230,7 @@ proposition P ∧ R and our constructed proof of P ∧ Q (left
 intro rule to obtain a proof of the conclusion in this case
 with the proposition P ∧ Q and our constructed "and" proof
 of P ∧ R. Like with P ∧ Q, we used the "and" introduction
-rule.
-
-(P ∧ Q) ∨ (P ∧ R) → P ∧ (Q ∨ R) with the assumption that
+rule. (P ∧ Q) ∨ (P ∧ R) → P ∧ (Q ∨ R) with the assumption that
 (P ∧ Q) ∨ (P ∧ R) is true. We want to prove an "and"
 proposition, so we use the "and" introduction rule, which
 needs proofs of its side propositions. We use the "or"
@@ -279,10 +284,15 @@ begin
   apply or.intro_right P (and.intro q r),
 end
 /-
-Paste.
-
-P ∨ (Q ∧ R) → (P ∨ Q) ∧ (P ∨ R) by first assuming that our
-premise is true. Then, apply the "or" elimination rule to
+To prove the provided proposition, first assume that
+we have some proposition, P. Then, apply the if-and-
+only-if introduction rule to the two proofs that it
+requires. The first proof that it requires is that of
+the forwards direction implies proposition. The
+second proof that it requires is that of the
+backwards direction implies proposition. P ∨ (Q ∧ R)
+→ (P ∨ Q) ∧ (P ∨ R) by first assuming that our premise
+is true. Then, apply the "or" elimination rule to
 perform case analysis. In the first case, we must assume P,
 with which we use the context to prove our conclusion. We
 do this by using the "and" introduction rule. The first proof
@@ -298,6 +308,8 @@ and a proof of Q (from the left "and" elimination rule)
 
 -- #9
 example : ∀ (P Q : Prop), P ∧ (P ∨ Q) ↔ P :=
+-- **Forwards: P ∧ (P ∨ Q) → P**
+-- **Backwards: P → P ∧ (P ∨ Q)**
 begin
   assume P Q,
   apply iff.intro _ _,
@@ -309,9 +321,27 @@ begin
   apply and.intro p _,
   apply or.intro_left Q p,
 end
+/-
+First, assume some propositions P and Q. Then,
+apply the if-and-only-if introduction rule on
+the two required proofs, which are the left-hand/
+forwards direction proposition and the right-hand
+/backwards direction proposition. For the former,
+we prove by first assuming that the premise is
+true and, then, exacting (applying) the left
+and elimination rule on that proof to get the
+proof of P. Finally, to prove the latter
+proposition, first assume P, second apply the
+and introduction rule on the proof of P. We need
+another proof to fulfill the rule, which we can
+obtain by applying the left or introduction rule
+on the proposition Q and the assumed proof of P.
+-/
 
 -- #10
 example : ∀ (P Q : Prop), P ∨ (P ∧ Q) ↔ P :=
+-- **Forwards: P ∨ (P ∧ Q) → P**
+-- **Backwards: P → P ∨ (P ∧ Q)**
 begin
   assume P Q,
   apply iff.intro _ _,
@@ -326,43 +356,102 @@ begin
   assume p,
   apply or.intro_left (P ∧ Q) p,
 end
+/-
+To prove the above proposition, first assume
+some proposition P. Then, use the if-and-only
+-f introduction rule to apply our two
+required proofs, which are the left-hand and
+the right-hand sides of our if-and-only-if
+proposition. Proving our left-hand side
+proposition (forwards implies) requires that
+we first assume its premise is true
+(P ∨ (P ∧ Q)). Then, apply the or elimination
+rule to this proof in order to perform case
+analysis. In the first case, assume P, and
+with that proof, apply it to get our proof of
+P. Then, assume P ∧ Q, and apply the left and
+elimination rule to that proof to obtain the
+proof of P. Finally, to prove that P →
+(P ∨ (P ∧ Q)), assume P and apply the left
+introduction rule on the proposition P ∧ Q
+and the proof of P.
+-/
 
 -- #11
 example : ∀ (P : Prop), P ∨ true ↔ true :=
+-- **Forwards: P ∨ true → true**
+-- **Backwards: true → P ∨ true**
 begin
   assume P,
   apply iff.intro _ _,
   -- forwards
   assume portrue,
-  /-
-  apply or.elim portrue,
-  assume p,
-  apply or.intro_left true p,
-  -/
   apply true.intro,
   -- backwards
   assume t,
   apply or.intro_right P t,
 end
+/-
+To prove the above proposition, first assume
+some proposition P. Then, use the if-and-only
+-f introduction rule to apply our two
+required proofs, which are the left-hand and
+the right-hand sides of our if-and-only-if
+proposition. For the left-hand side proof,
+assume the premise is true. Given that proof,
+apply the true introduction rule to obtain the
+proof of true, which we must have given our
+proof of the premise. For the right-hand side
+of our proposition, we prove it by assuming
+true and applying the right or introduction
+rule to the proposition P and the proof of true
+to get our needed proof of the larger or
+proposition.
+-/
 
 -- #12
 example : ∀ (P : Prop), P ∨ false ↔ P :=
+-- **Forwards: P ∨ false → P**
+-- **Backwards: P → P ∨ false**
 begin
   assume P,
   apply iff.intro _ _,
-  -- forward
+  -- forwards
   assume p_or_false,
-  -- do case analysis?
-  apply or.elim p_or_false,
-  --- P → P
+  cases p_or_false,
+  exact p_or_false,
+  apply false.elim p_or_false, -- alternatively, contradiction
+  -- backwards
   assume p,
-  exact p,
-  --- false → P
-  assume f,
+  apply or.intro_left false p,
 end
+/-
+To prove the above proposition, first assume
+some proposition P. Then, use the if-and-only
+-f introduction rule to apply our two
+required proofs, which are the left-hand and
+the right-hand sides of our if-and-only-if
+proposition. To get a proof the left-hand side
+proposition, first assume that it is true.
+Since it is an or proposition, it has two
+cases we need to analyze. An or proposition
+will be true when at least one of its side
+propositions is true. Given a proof that this
+is the case, the remaining proof to be obtained
+is for false → P. For this, apply the false
+elimination rule to the proposition. To get a
+proof of the right-hand side of our if-and-only
+-if proposition, first assume P by the implies
+introduction rule. Then, use the left or
+introduction rule to obtain a proof of the
+larger or proposition with the proposition false
+and our proof of P.
+-/
 
 -- #13
 example : ∀ (P : Prop), P ∧ true ↔ P :=
+-- **Forwards: P ∧ true → P**
+-- **Backwards: P → P ∧ true**
 begin
   assume P,
   apply iff.intro _ _,
@@ -373,9 +462,30 @@ begin
   assume p,
   apply and.intro p true.intro,
 end
+/-
+To prove the above proposition, first assume
+some proposition P. Then, use the if-and-only
+-f introduction rule to apply our two
+required proofs, which are the left-hand and
+the right-hand sides of our if-and-only-if
+proposition. To acquire the left-hand side
+proof, first assume that we have it by the
+implies introduction rule. Given that proof,
+we may then apply the left and elimination
+rule to it, which will provide us with the
+proof of P that we need. Remaining to be
+proved is the left-hand side of the if-and-
+only-if proposition (P ∧ true). To obtain this
+proof, first assume the premise. Then, apply
+the and introduction rule using our assumed
+proof and the proof of true (to obtain the
+proof of the larger and proposition).
+-/
 
 -- #14
 example : ∀ (P : Prop), P ∧ false ↔ false :=
+-- **Forwards: P ∧ false → false**
+-- **Backwards: false → P ∧ false**
 begin
   assume P,
   apply iff.intro _ _,
@@ -384,6 +494,22 @@ begin
   apply and.elim_right p_and_false,
   -- backwards
   assume f,
-  apply and.intro _ f,
-  assume p,
+  apply false.elim f, -- **???**
 end
+/-
+To prove the above proposition, first assume
+some proposition P. Then, use the if-and-only
+-if introduction rule to apply our two
+required proofs, which are the left-hand and
+the right-hand sides of our if-and-only-if
+proposition. To acquire the left-hand side
+proof, assume the premise of the left-hand
+side proposition, which can be done by the
+implies introduction rule. Given that proof,
+we may perform the right and elimination rule to
+obtain our proof of false. What we have left
+to prove is the right-hand side of our if-
+and-only-if proposition. Begin by assuming
+that we have a proof of false, then apply
+the false elimination rule to that proof.
+-/

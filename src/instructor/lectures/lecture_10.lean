@@ -1,11 +1,14 @@
 /-
 In today's class, we'll continue with our
-exploration of the proposition, "false", 
+exploration of the proposition, "false",
 its elimination rule, and their vital uses
-in logical reasoning: especially in  
+in logical reasoning: especially in
+**True has only an introduction rule, whereas false has only an elimination rule.**
 
-- proof of ¬P by negation
+- proof of ¬P by negation **(¬ = "not")** **(not P = P implies false, P → false)**
 - proof of P by false elimination
+
+**What is negation and false elimination?**
 
 Here are the inference rules in display
 notation:
@@ -28,7 +31,7 @@ you can derive a contradiction. What you
 have then shown, of course, is P → false.
 
 So, to prove ¬P, assume P and show that in
-this context there is a contradiction. 
+this context there is a contradiction. **(show that there is a contradiction, you are in a situation that can't happen; how do I do this?)**
 This is proof by negation. It is not to be
 confused with proof by contradition, which
 is a different thing entirely. 
@@ -39,6 +42,12 @@ approach to a proposition, P, by assuming
 to a contradiction. That proves ¬¬P. Then 
 you use the *indepedent* axiom of negation 
 elimination to infer P from ¬¬P.)
+
+**Proof (of ¬P) by "negation":**
+**- Given a proof of P → false, you can get a proof of ¬P.**
+**- Given a proof of not P...you can get...a proof of not P...**
+
+**So how do we prove P → false?**
 
 FALSE ELIMINATION
 
@@ -57,6 +66,8 @@ A contradiction makes a logic inconsistent.
         (pf : P)
 
 -/
+-- **Proof (of P) by "false elimination":**
+---- **Given a proof of false and a proposition P, you can get a proof of P.**
 
 /-
 We covered the relatively simpler notion of
@@ -71,7 +82,7 @@ To make sense of false elimination, think in
 terms of case analysis. Proof by case analysis 
 says that if the truth of some proposition, Y,
 follows from *any possible form of proof* of X, 
-then you've proved X → Y. 
+then you've proved X → Y. **(no possible proofs? return proof of Y trivially)**
 
 If X is a disjunction, P ∨ Q (so now you want 
 to prove P ∨ Q → Y) you must consider two cases:
@@ -83,13 +94,13 @@ proof (e.g., the proposition, true), there's
 just one case to consider. 
 -/
 
--- two cases
+-- two cases **(could I use this for hw?)**
 example : true ∨ false → true :=
 begin
   assume h,
   cases h,
-  assumption,     -- context has exact proof
-  contradiction,  -- context has contradiction
+  assumption,     -- context has exact proof | true → true
+  contradiction,  -- context has contradiction | true → false
 end
 
 -- one case
@@ -113,6 +124,7 @@ begin
   assume f,
   cases f,    -- case analysis: there are no cases!
 end
+-- **false elim - no possible cases here, can just return**
 
 /-
 In fact, it doesn't matter what your conclusion
@@ -128,8 +140,9 @@ theorem false_elim : ∀ (P : Prop), false → P :=
 begin
   assume P,
   assume f,
-  cases f,
+  cases f, -- do case analysis, there's 0 cases, trivially satisfies cases, you're done (cz there's nothing to do)
 end
+-- **for all props P, false implies P aka Ex false quod libet. From false anything follows**
 
 /-
 This, then, is the general principle for false
@@ -176,7 +189,17 @@ SOME THEOREMS INVOLVING FALSE AND NEGATION
 
 theorem no_contradiction : ∀ (P : Prop), ¬(P ∧ ¬P) :=
 begin
-end
+  assume P,
+  -- Goal is to prove NOT something, so if it were true, it'd be a contradiction;
+  -- self: need to prove an implication if P ∧ ¬P, then FALSE, the next step is just to assume ("implies" intro rule)
+  assume h, -- h : P ∧ ¬P -- not is the same thing as an implication (for false)!!!
+  -- what's in my context?
+  have p := h.left, --and.elim_left h
+  have np := h.right,
+  -- i have a proof of p and a proof of np; np is a proof of p implies false
+  apply np p,
+  -- or have f := np p, apply the imp (if p then false) to a proof of p to get f (false)
+end -- if you have a proof of negation (¬P), you have a function you can apply
 
 /-
 The so-called "law" (it's really an axiom) of the

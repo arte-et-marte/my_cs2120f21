@@ -106,12 +106,11 @@ end
 /-
 So, wow, we just gained a lot of insight!
 
-true  →  true     true
-true  →  false    false
-false →  true     true
-false →  false    true
+true  →  true     true  **| assume t, exact true.intro (to get a proof of true)**
+true  →  false    false **| assume t, --- (you can't provide a proof of false!)**
+false →  true     true  **| assume f, exact true.intro**
+false →  false    true  **| assume f, exact f (you've already ASSUMED that you have a proof of false, so just exact (apply) it!)**
 -/
-
 
 /-
 Having built some intuition, let's get back to 
@@ -123,6 +122,14 @@ there are no proofs of it. If you can produce a
 proof of P → false, then you can conclude ¬P. 
 This is the introduction rule for ¬.
 -/
+-- **2 Sides of the Same Coin:**
+-- **(¬P) is the proposition (P → false).**
+-- **The proposition (P → false) is (¬P).**
+-- **The ¬ Introduction Rule:**
+---- **The → introduction rule supplies a proof by: assuming that there is one.**
+---- **The ∧ introduction rule supplies a proof by: applying the left-hand proof and the right-hand proof.**
+---- **The ∨ introduction rules supply proofs by: applying the left-hand/right-hand proposition and the proof of the right-hand/left-hand proposition.**
+---- **The ¬ introduction rule supplies a proof by: first assuming that you have a proof of false and second exacting (applying) it.**
 
 #check not    -- see definition in Lean library
 
@@ -142,18 +149,20 @@ example : false :=
 begin                     -- no way to prove this 
 end
 
-example : ¬ false := 
+example : ¬ false := -- **¬false is the same thing as false → false.**
 begin
   assume f,               -- REMEMBER: ¬P *means* P → false, so *assume* P, show false.
   exact f,
 end
 
-example : ¬ (0 = 1) := 
+example : ¬ (0 = 1) := -- **¬(0 = 1) is the same thing as (0 = 1) → false.**
 begin
   assume h,
-  -- what do we do now?
+  -- **BEGINNING OF THE END???**
+  -- **Stuck?** (Goal here is to provide a proof of false; impossible, unless I can ASSUME that I have a proof of false somehow.)
+  cases h, --**Coming back up from notes on "cases"**
+  -- **Looking at "cases", it looks like we apply a proof of something that implies false to it, in order to get false/a proof of false.**
 end
-
 
 /-
 To understand how to finish off this last
@@ -240,6 +249,11 @@ there are *zero* ways to construct proof, *and
 so there are zero cases to consider, and the
 truth of your conclusion follows automatically!
 -/
+-- **Key point from the above passage: There are**
+-- **ZERO ways to construct a proof of false, so**
+-- **there are ZERO cases to consider. Therefore**
+-- **, we can just say that our conclusion is**
+-- **true.** cause we've technically considered all cases/proven all cases! (???)
 
 /-
 Here we prove false → false again, but this
@@ -282,7 +296,7 @@ you can just ignore this situation.
 -/
 
 theorem false_elim (P : Prop) (f : false) : P :=
-begin
+begin -- need to provide a proof of P
   cases f,
 end
 
@@ -298,6 +312,8 @@ it any further." Or, formally, (false.elim f).
 example : false → false :=
 begin
   assume f,
+  -- alternatively, exact f,
   exact false.elim f, -- Using Lean's version
+  -- **applying a proof of false, f, to false.elim, which as a whole we're applying to exact**
 end
 
