@@ -21,6 +21,8 @@ Answer: By the theorem that states that equality is symmetric, we can prove that
 z=w by the axiom of substutability and the axiom of reflexivity. QED.
 -/
 
+
+
 /- #2
 Give a formal statement of the conjecture (proposition) from
 #1 by filling in the "hole" in the following definition. The
