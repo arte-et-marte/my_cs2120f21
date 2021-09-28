@@ -213,6 +213,8 @@ excluded middle says that any proposition is either
 true or false. There's no middle ground. But in the
 constructive logic of Lean, this isn't true. 
 
+**The "Law" of the Excluded Middle**
+
 To prove P ∨ ¬P, as you recall, we need to have 
 either a proof of P (in this case  use or.intro_left)
 or a proof of ¬P, in which case we use or.intro_right
@@ -281,11 +283,12 @@ Rather, if we want to use it, we have to accept it as
 an additional axiom. We thus have two different logics:
 one without and one with the law of the excluded middle!
 -/
+-- **Logic in Lean: has or does not have the Law of the Excluded Middle factored in.**
 
 axiom excluded_middle : ∀ (P : Prop), (P ∨ ¬P)
 
 example : goldbach_conjecture ∨ ¬goldbach_conjecture := 
-  excluded_middle goldbach_conjecture
+  excluded_middle goldbach_conjecture -- **Apply the Law of the Excluded Middle on your proposition.**
 
 /-
 That is all it took to add this axiom to our logic. In the
@@ -301,8 +304,8 @@ example : goldbach_conjecture ∨ ¬goldbach_conjecture :=
 HOW TO USE EXCLUDED MIDDLE.
 
 The real power is in how we *use* this new axiom.
-You give it a proposition, P, it gives you a proof
-of a disjunction (P ∨ ¬P). Well, what do you do with
+**You give it a proposition, P, it gives you a proof of a disjunction (P ∨ ¬P).**
+Well, what do you do with
 a proof of a disjunction? Answer: a case analysis. 
 
 Given a proposition, P, the "strategy," then, is to
