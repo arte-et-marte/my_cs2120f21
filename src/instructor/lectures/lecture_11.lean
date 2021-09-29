@@ -168,4 +168,5 @@ begin                 -- goal is to prove P
   assume np,          -- this entails assuming ¬P and deriving a contradiction
                       -- that's the essence of proof by contradiction
                       -- of course we have no information to finish this proof
+                      
 end
