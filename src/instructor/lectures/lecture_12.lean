@@ -29,6 +29,7 @@ begin
   that value has the required property.
 
   -/
+  unfold ev,
   apply exists.intro 4 _, -- proof of ev 2 tbd
   --unfold ev,            -- remind me what ev 2 means
   exact rfl,
