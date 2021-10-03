@@ -1,0 +1,2 @@
+-- Is the exam open-note?
+-- What does lemma mean?

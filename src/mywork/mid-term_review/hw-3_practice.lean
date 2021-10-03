@@ -56,3 +56,40 @@ begin
   have q : Q := and.elim_right p_and_q,
   contradiction,
 end
+
+-- 6
+theorem demorgan_2 : ∀ (P Q : Prop), ¬(P ∨ Q) → ¬P ∧ ¬Q :=
+begin
+  assume P Q,
+  assume n_porq,
+  have np_or_nnp : ¬P ∨ ¬¬P := classical.em ¬P,
+  cases np_or_nnp with np nnp,
+  have nq_or_nnq : ¬Q ∨ ¬¬Q := classical.em ¬Q,
+  cases nq_or_nnq with nq nnq,
+  -- case 1
+  exact and.intro np nq,
+  -- case 2 **TRICKY!!!**
+  apply false.elim (n_porq _),
+  have q_or_nq : Q ∨ ¬Q := classical.em Q,
+  cases q_or_nq with q nq,
+  ---- subcase 1
+  exact or.intro_right P q,
+  ---- subcase 2
+  contradiction,
+  -- case 3 **Remember: You are trying to show a contradiction (get a proof by negation) by means the false elimination rule.**
+  apply false.elim (n_porq _),
+  have p_or_np : P ∨ ¬P := classical.em P,
+  cases p_or_np with p np,
+  ---- subcase 1
+  exact or.intro_left Q p,
+  ---- subcase 2
+  contradiction,
+end
+
+-- 10
+theorem not_all_nats_are_zero : ¬(∀ (n : ℕ), n = 0) :=
+begin
+  assume prop,
+  have f := prop 1, -- **Not 'have f : false := prop 1' because it's not a proof of false that prop 1 should return; it should return a proof of n = 1.**
+  contradiction,
+end

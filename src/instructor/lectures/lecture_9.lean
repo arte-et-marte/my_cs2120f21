@@ -283,7 +283,7 @@ Here, then, is the general principle for false
 elimination: how you *use* a proof of false that
 you have been given, that you've assumed, or that
 you've derived from a contradiction (as we will
-see).
+see). **False elim rule states - From false anything follows.**
 
 The theorem states that if you're given any
 proposition, P, and a proof, f, of false, then
