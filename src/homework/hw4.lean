@@ -6,6 +6,10 @@ begin
   assume (h : 0 = 1),
   -- can also use 'trivial'
   contradiction, -- **COMMENT: You could have also used "cases" on your proof (of something that implies false) to obtain a proof of false.**
+  -- ¬ (0 = 1)
+  -- (0 = 1) → false
+  assume h,
+  trivial,
 end
 
 -- 2
@@ -19,6 +23,9 @@ begin
   -- **COMMENT: Need to give h a proof of 0 = 0 (to get a proof of false).**
   have f : false := h (eq.refl 0),
   contradiction, -- **COMMENT: You could have also used "exact false.elim f,".**
+  have zeqz := eq.refl 0,
+  have f : false := h zeqz,
+  exact false.elim (f),
 end
 -- **COMMENT: Whether you have a proof of false or you need a proof of false, you may be able to use "contradiction".**
 
@@ -95,10 +102,23 @@ begin
   assume pandq,
   cases pandq with p q,
   contradiction, -- in the context (have nq and q)
+  assume P Q,
+  split,
+  -- forward
+  assume h,
+  cases (classical.em P) with p np,
+  cases (classical.em Q) with q nq,
+  have pq := and.intro p q,
+  contradiction,
+  exact or.inr nq,
+  exact or.inl np,
+  -- backward
+  admit,
 end
 
 -- 6
 theorem demorgan_2 : ∀ (P Q : Prop), ¬(P ∨ Q) → ¬P ∧ ¬Q :=
+theorem demorgan_2 : ∀ (P Q : Prop), ¬ (P ∨ Q) → (¬P ∧ ¬Q) :=
 begin
   assume P Q,
   assume h,
@@ -142,6 +162,12 @@ begin
   exact or.intro_left Q p,
   ---- subcase 2:
   contradiction,
+  have porq := or.intro_left Q p,
+  contradiction,
+  have porq := or.intro_left Q p,
+  contradiction,
+  cases (classical.em Q) with q nq,
+
 end
 
 -- 7
@@ -360,3 +386,10 @@ begin
   assume q,
   contradiction,
 end
+end
+
+
+
+axioms (T : Type) (Q : Prop) (f : ∀ (t : T), Q) (t : T)
+example : Q := f t
+#check f
