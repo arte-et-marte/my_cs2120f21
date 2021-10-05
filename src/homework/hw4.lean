@@ -4,6 +4,7 @@ begin
   -- 0 ≠ 1 => ¬(0 = 1),
   -- ¬(0 = 1) => (0 = 1) → false
   assume (h : 0 = 1),
+  -- can also use 'trivial'
   contradiction, -- **COMMENT: You could have also used "cases" on your proof (of something that implies false) to obtain a proof of false.**
 end
 
@@ -13,6 +14,8 @@ begin
   -- 0 ≠ 0 => 0 = 0 → false
   -- **?: 0 ≠ 0 → 2 = 3 => 0 = 0 → false → 2 = 3**
   assume h,
+  -- have zeqz := eq.refl 0,
+  -- contradiction,
   -- **COMMENT: Need to give h a proof of 0 = 0 (to get a proof of false).**
   have f : false := h (eq.refl 0),
   contradiction, -- **COMMENT: You could have also used "exact false.elim f,".**
@@ -22,9 +25,10 @@ end
 -- 3
 example : ∀ (P : Prop), P → ¬¬P := -- **COMMENT: Trying to prove that the existence of the proof of P means that there isn't NOT a proof of P.**
 begin
+  -- can CONSTRUCT a proof of double negation, don't need classical reasoning
   assume P,
   assume (p : P),
-  assume h, -- **COMMENT: P → false is a premise to ¬¬P => (P → false) → false.**
+  assume h, -- **COMMENT: P → false is a premise to ¬¬P => (P → false) → false.** not not p just means not p implies false, so you can assume p
   -- **COMMENT: Need to give h a proof of P (to get a proof of false).**
   have f : false := h p,
   contradiction, -- **COMMENT: You could have also used "exact f".**
@@ -51,7 +55,7 @@ either P or of ¬P to have a proof of P ∨ ¬P.
 theorem neg_elim : ∀ (P : Prop), ¬¬P → P :=
 begin
   assume P,
-  assume h,
+  assume h, -- h doesn't help us at all to get a proof of p, all we have left are our standalone props (P and Q), which we can use with the law of em
   -- ¬¬P => (P → false) → false // em says: there is a proof of ¬P, or there is not (P)
   have pornp := classical.em P, -- **COMMENT: Applying the axiom of the excluded middle to get a proof of P ∨ ¬P (to get a proof of P).**
   cases pornp with p np, -- **COMMENT: Performing case analysis (and assigning names to our assumed proofs).**
@@ -62,10 +66,12 @@ end
 -- 5
 theorem demorgan_1 : ∀ (P Q : Prop), ¬(P ∧ Q) ↔ ¬P ∨ ¬Q :=
 begin
+  -- if p and q is false, then at least one of them is false
+  -- if p or q is false, then there's no way p and q is true
   assume P Q,
-  apply iff.intro _ _,
+  apply iff.intro _ _, -- could also use split
   -- forwards
-  assume h,
+  assume h, -- stuck? unless we look somewhere other than h...
   have p_or_np := classical.em P,
   have q_or_nq := classical.em Q,
   cases p_or_np with p np,
@@ -94,6 +100,24 @@ end
 -- 6
 theorem demorgan_2 : ∀ (P Q : Prop), ¬(P ∨ Q) → ¬P ∧ ¬Q :=
 begin
+  assume P Q,
+  assume h,
+  cases (classical.em P) with p np,
+  cases (classical.em Q) with q nq,
+  -- case 1
+  have porq := or.intro_left Q p,
+  have f := h porq,
+  exact false.elim f,
+  -- case 2
+  have porq := or.intro_left Q p,
+  have f := h porq,
+  exact false.elim f,
+  -- case 3
+  have q_or_nq := classical.em Q,
+  cases q_or_nq with q nq,
+  ---- subcase 1
+  ---- subcase 2
+  
   assume P Q,
   assume h,
   have np_or_nnp := classical.em ¬P,

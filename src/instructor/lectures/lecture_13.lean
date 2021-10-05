@@ -107,6 +107,12 @@ example :
   (∃ (b : Ball), Red b ∧ Green b) → 
   (∃ (b : Ball), Red b) :=
 begin
+  assume w,
+  cases w with b h, -- applying exists.elim, 1st case: assume b of type ball, know that it's red and green
+  -- cases applying exists.elim which takes a proof of an exists statement and spits out the witness value, predicate proof
+  -- to prove exists statement, need exists intro rule
+  apply exists.intro b (and.elim_left h),
+
   assume h,
   cases h with b rb_and_gb, -- applying the exists elimination rule, which returns the w and the proof that w satisfies the predicate
   apply exists.intro b _,
@@ -151,15 +157,28 @@ Social Networks
 -/
 
 axioms
-  (Person : Type)
-  (Nice : Person → Prop)
-  (Likes : Person → Person → Prop)
+  (Person : Type) -- a person is a type
+  (Nice : Person → Prop) -- nice is a function from person to prop, given a person, that person is nice
+  (Likes : Person → Person → Prop) -- a function that takes in 2 people, returns prop that first person likes second person
 
 example : 
 -- if there is a person that everyone likes, then each person there is someone that they like
   (∃ (p1 : Person), ∀ (p2 : Person), Likes p2 p1) → 
   (∀ (e : Person), ∃ (s : Person), Likes e s) :=
+-- there exists a person that everybody likes
+-- for every person there exists someone that they like
+-- forwards is true, backwards is not
 begin
+  assume h, -- there exists a person such that...
+  -- big exists proof, need elim to split it up into component parts
+  cases h with person1 w,
+  -- forall statement now, first step assume
+  assume person2,
+  -- need person1 (our witness that satisfies pred)
+  apply exists.intro person1 _,
+  -- do we see anything that provides a proof of Likes - w!
+  apply w person2,
+
   assume h,
   assume e,
   cases h with p pf,
@@ -173,20 +192,62 @@ English language sentences.
 -/
 
 -- Everyone likes him or herself
-
+∀ (p : Person), Likes p p
 -- Someone doesn't like him or herself
-
+(∃ p : Person), ¬(Likes p p) -- not takes in a proposition
+¬(∀ (p : Person)), Likes p p
 -- There is someone likes someone else
-
+∃ (p1 p2 : Person), Likes p1 p2
 -- No one likes anyone who dislikes them
-
+¬ (∃ (p : Person) ), ¬(Likes )
 -- Everyone likes anyone who is nice
 
 -- No one likes anyone who is not nice
-
+¬ (∃ (p : Person)), ∀ (p2 : Person), ¬ Nice p2 → Likes p p2,
+-- there exists a person such that (,) for all people, NOT p does like not nice p2
 
 /-
 If everyone who's nice likes someone, then
 there is someone whom everyone who is nice 
 likes.
 -/
+((∀ p : Person), (∃ p2 : Person), Nice p → Likes p p2) → (∃ (p : Person), ∀ (p2 : Person), Nice p2 → Likes p2 p)
+
+example : ¬(∀ (p : Person), Likes p p) ↔ (∃ (p : Person), ¬(Likes p p)) :=
+begin
+  apply iff.intro _ _,
+  -- forwards implication proof
+  assume left, -- have a proof of an exists statement, which we can use elim on
+  apply exists.intro _ 
+end
+
+example : ¬(∀ (p : Person), Likes p p) → (∃ (p : Person), ¬(Likes p p)) :=
+begin
+  assume h,
+  have f := classical.em ((∃ (p : Person), ¬(Likes p p))),
+  cases f,
+  -- case 1
+  assumption,
+  -- want to prove a contradiction, which to build? build h's? how?
+  have contra : ∀ (p : Person), Likes p p := _, -- set goal
+  contradiction,
+  -- case 2
+  assume p,
+  -- how to prove Likes p p
+  have h := classical.em (Likes p p),
+  cases h,
+  -- subcase 1
+  assumption,
+  -- subcase 2
+  have contra2 : ∃ (p : Person), ¬(Likes p p) := exists.intro p h,
+  contradiction,
+end
+
+example : (∃ (p : Person), ¬(Likes p p)) → ¬(∀ (p : Person), Likes p p) :=
+begin
+  assume h,
+  cases h with p pf,
+  assume p2,
+  have f := p2 p,
+  contradiction,
+end
