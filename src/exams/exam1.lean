@@ -41,13 +41,15 @@ rule for →.
 
 (P Q : Prop) (p2q : P → Q) (p : P)
 ----------------------------------
-     [replace with answer]
+     (q : Q) -- **Ans.**
 -/
 
 -- Give a formal proof of the following
 example : ∀ (P Q : Prop) (p2q : P → Q) (p : P), Q :=
 begin
-  _
+  assume P Q p2q p, -- **Ans.**
+  have q : Q := p2q p,
+  exact q,
 end
 
 -- Extra credit [2 points]. Who invented this principle?
@@ -55,7 +57,6 @@ end
 
 
 -- -------------------------------------
-
 
 /- #2: true [5 points]
 
@@ -72,7 +73,9 @@ inference rule notation.
 Give a brief English language explanation of
 the introduction rule for true.
 
--- answer here
+-- The introduction rule for true provides -- **Ans.**
+that a proof of true is constructed by simply
+accepting that true is true.
 
 ELIMINATION
 
@@ -87,8 +90,7 @@ there's no use for an elimination rule.
 
 -- Give a formal proof of the following:
 
-example : true := _
-
+example : true := true.intro -- **Ans.**
 
 -- -------------------------------------
 
@@ -109,12 +111,45 @@ Given an English language description of
 this inference rule. What does it really
 say, in plain simple English. 
 
--- answer here
+The and introduction rule provides that **Ans.**
+a proof of an and proposition is
+constructed by providing a proof of the
+left proposition and a proof of the right
+proposition. In other words, if you were
+to prove the proposition that "My cat is
+cute and fluffy," then you would need to
+assume that "My cat is cute" and "My cat
+is fluffy" are propositions and have a proof
+of each of these propositions.
 
 ELIMINATION
 
 Given the elimination rules for ∧ in both
 inference rule and English language forms.
+
+Inference rule notation: **Ans.**
+(P Q : Prop) (p_and_q : P ∧ Q)
+------------------------------ (and.elim_left)
+            (p : P)
+
+(P Q : Prop) (p_and_q : P ∧ Q)
+------------------------------ (and.elim_right)
+            (q : Q)
+
+English description: **Ans.**
+The left and elimination rule provides that a
+proof of the left proposition is obtained when
+there is a proof of the left proposition AND
+a proof of the right proposition, that is, when
+there is a proof of the and proposition. The
+right introduction rule provides the same thing
+except for the right proposition. In other
+words, if you were to have a proof of the
+proposition that "I have a million dollars and
+it is sunny in Honolulu today", then you would know
+for a fact that I have a million dollars (left
+and elimination rule) and that it is sunny in
+Honolulu today (right introduction rule).
 -/
 
 /-
@@ -122,8 +157,12 @@ Formally state and prove the theorem that,
 for any propositions P and Q,  Q ∧ P → P. 
 -/
 
-example : _ := _
-
+example : ∀ (P Q : Prop), Q ∧ P → P := -- **Ans.**
+begin
+  assume P Q q_and_p,
+  have p : P := and.elim_right q_and_p,
+  exact p,
+end
 
 -- -------------------------------------
 
@@ -137,7 +176,14 @@ T is any type (such as nat) and Q is any proposition
 given type), how do you prove ∀ (t : T), Q? What is
 the introduction rule for ∀?
 
--- answer here
+-- The introduction rule for ∀ provides that a proof -- **Ans.**
+of something (e.g., Q) given an arbitrary something
+of a certain type may be constructed by simply assuming
+that we have some arbitrary something of that type
+and showing that that something makes Q true. By showing
+that that arbitrarily selected something of the
+specified type can prove Q, the proposition ∀ (t : T),
+Q is thus proven.
 
 ELIMINATION
 
@@ -148,15 +194,20 @@ what it says.
 
 (T : Type) (Q : Prop), (pf : ∀ (t : T), Q) (t : T)
 -------------------------------------------------- elim
-                [Replace with answer]
+                (q : Q) **Ans.**
 
--- English language answer here
+-- You can obtain a proof of Q provided that you have **Ans.**
+a specified type, T, a proposition about something of
+that type, Q, a proof of the proposition that Q is true
+for all things of that type, and a proof that you have
+something of that type, t. This is what the elimination
+rule for ∀ provides.
 
 Given a proof, (pf : ∀ (t : T), Q), and a value, (t : T),
 briefly explain in English how you *use* pf to derive a
 proof of Q.
 
--- answer here
+-- I would provide pf t. That is, I would apply pf to t. **Ans.**
 -/
 
 /-
@@ -167,12 +218,14 @@ challenge problems.
 
 axioms
   (Person : Type)
-  (KnowsLogic BetterComputerScientist : Person → Prop)
+  (KnowsLogic BetterComputerScientist : Person → Prop) -- Given a person, the propositions KnowsLogic and BetterComputerScientist will be returned.
   (LogicMakesYouBetterAtCS: 
     ∀ (p : Person), KnowsLogic p → BetterComputerScientist p)
-  -- formalizee the following assumptions here
+  -- formalize the following assumptions here
   -- (1) Lynn is a person
+  (Lynn : Person) --**Ans.**
   -- (2) Lynn knows logic
+  (LynnKnowsLogic : KnowsLogic Lynn) -- **Ans.**
   -- add answer here
   -- add answer here
 
@@ -180,9 +233,10 @@ axioms
 Now, formally state and prove the proposition that
 Lynn is a better computer scientist
 -/
-example : _ := _
-
-
+example : BetterComputerScientist Lynn := -- **Ans.**
+begin
+  apply LogicMakesYouBetterAtCS Lynn LynnKnowsLogic,
+end
 
 -- -------------------------------------
 
@@ -196,7 +250,7 @@ Lean's definition of not.
 -/
 
 namespace hidden
-def not (P : Prop) := _ -- fill in the placeholder
+def not (P : Prop) := P → false  -- fill in the placeholder -- **Ans.**
 end hidden
 
 /-
@@ -205,7 +259,14 @@ of "proof by negation." Explain how one uses this
 strategy to prove a proposition, ¬P. 
 -/
 
--- answer here
+-- We use the proof by negation when we want to **Ans.**
+-- prove that P → ¬P. In other words, we want to
+-- show that from a proof of P, we can say that
+-- there is no proof of P. The only way that this
+-- proposition can be true is if we show that a
+-- proof of P leads to a contradiction. From this
+-- contradiction, anything may follow, and thus,
+-- we can prove that P → ¬P.
 
 /-
 Explain precisely in English the "proof strategy"
@@ -215,19 +276,17 @@ the lack of a ¬ in front of the P).
 
 Fill in the blanks the following partial answer:
 
-To prove P, assume ____ and show that __________.
-From this derivation you can conclude __________.
-Then you apply the rule of negation ____________
-to that result to arrive a a proof of P. We have
+To prove P, assume __¬P__ and show that __a contradiction follows__. **Ans.**
+From this derivation you can conclude __¬¬P__.
+Then you apply the rule of negation __elimination__
+to that result to arrive at a proof of P. We have
 seen that the inference rule you apply in the 
 last step is not constructively valid but that it
-is __________ valid, and that accepting the axiom
-of the __________ suffices to establish negation
-__________ (better called double _____ _________)
+is __classically__ valid, and that accepting the axiom
+of the __excluded middle__ suffices to establish negation
+__elimination__ (better called double __false__ __elimination__)
 as a theorem.
 -/
-
-
 
 -- -------------------------------------
 
@@ -253,11 +312,13 @@ that iff has both elim_left and elim_right
 rules, just like ∧.
 -/
 
-example : _ :=
+example : ∀ (P Q : Prop), (P ↔ Q) → (Q ↔ P) := -- **Ans.**
 begin
-_
+  assume P Q p_iff_q,
+  have p_iff_q_left : P → Q := iff.elim_left p_iff_q,
+  have p_iff_q_right : Q → P := iff.elim_right p_iff_q,
+  exact iff.intro p_iff_q_right p_iff_q_left,
 end
-
 
 /- 
    ************************************************
@@ -304,10 +365,24 @@ If every car is either heavy or light, and red or
 blue, and we want a prove by cases that every car 
 is rad, then: 
 
--- how many cases will need to be considered? __
+-- how many cases will need to be considered? 3 **Ans.**
 -- list the cases (informaly)
-    -- answer here
+    -- Heavy car that is red,
+    -- Heavy car that is blue,
+    -- Light car that is red or blue
 
+-/
+
+/-
+axioms (P Q R S T: Prop) (p : (P ∨ Q) ∧ (R ∨ S))
+
+example : (P ∨ Q) ∧ (R ∨ S) → T :=
+begin
+  assume pqrs,
+  cases pqrs with pq rs,
+  cases pq with p q,
+  cases rs with r s,
+end
 -/
 
 /-
@@ -336,12 +411,8 @@ to write them formally, to show that you what
 the terms means.)
 -/
 
-def eq_is_symmetric : Prop :=
-  ∀ (T : Type) (x y : T), _
-
-def eq_is_transitive : Prop :=
-  _
-
+def equality_is_symmetric : Prop := ∀ (T : Type) (x y : T), x = y → y = x -- **Ans.**
+def equality_is_transitive : Prop := ∀ (T : Type) (x y z : T), x = y → y = z → x = z
 
 /-
   ************
