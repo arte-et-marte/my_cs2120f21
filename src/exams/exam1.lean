@@ -124,7 +124,7 @@ of each of these propositions.
 
 ELIMINATION
 
-Given the elimination rules for ∧ in both
+Give the elimination rules for ∧ in both
 inference rule and English language forms.
 
 Inference rule notation: **Ans.**
