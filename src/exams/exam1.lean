@@ -351,10 +351,26 @@ def ELJL : Prop :=
     (JLNT : Nice JohnLennon ∧ Talented JohnLennon),
     (∀ (p : Person), Likes p JohnLennon) 
     
+/-
+For all things of type Person, Nice, Talented, and Likes are propositions **Ans.**
+that may be made about them. Provided also is a proof that for all p of
+type Person, if p is Nice and p is Talented, then for all q of type Person,
+q likes p. JohnLennon is a Person, and he is both Nice and Talented. Thus,
+for all p of type Person, p must like JohnLennon.
+-/
 
-example : ELJL :=
+example : ELJL := -- **Ans.**
 begin
-  _
+  assume Person,
+  assume Nice Talented,
+  assume Likes,
+  assume everyone_likes_a_nice_and_talented_person,
+  assume JohnLennon,
+  assume john_lennon_is_nice_and_talented,
+  assume p,
+  apply everyone_likes_a_nice_and_talented_person,
+  exact and.elim_left john_lennon_is_nice_and_talented,
+  exact and.elim_right john_lennon_is_nice_and_talented,
 end
 
 
@@ -371,18 +387,6 @@ is rad, then:
     -- Heavy car that is blue,
     -- Light car that is red or blue
 
--/
-
-/-
-axioms (P Q R S T: Prop) (p : (P ∨ Q) ∧ (R ∨ S))
-
-example : (P ∨ Q) ∧ (R ∨ S) → T :=
-begin
-  assume pqrs,
-  cases pqrs with pq rs,
-  cases pq with p q,
-  cases rs with r s,
-end
 -/
 
 /-
@@ -430,8 +434,26 @@ both directions.
 -/
 
 def negelim_equiv_exmid : Prop := 
-  _
+  ∀ (P : Prop),
+  ¬¬P → P ↔ P ∨ ¬P
 
+example : negelim_equiv_exmid :=
+begin
+  assume P,
+  apply iff.intro _ _,
+  -- forwards
+  assume nnp_imp_p,
+  have p_or_np := classical.em P,
+  cases p_or_np with p np,
+  exact or.intro_left (¬P) p,
+  exact or.intro_right (P) np,
+  -- backwards
+  assume p_or_np,
+  assume nnp,
+  cases p_or_np with p np,
+  assumption,
+  contradiction,
+end
 
 /- 
 EXTRA CREDIT: Formally express and prove the
@@ -442,4 +464,11 @@ thre is someone who loves everyone. [5 points]
 
 axiom Loves : Person → Person → Prop
 
-example : _ := _
+example : (∃ (p : Person), ∀ (q : Person), Loves q p) → (∃ (p : Person), ∀ (q : Person), Loves p q) :=
+begin
+  assume l,
+  have r_or_nr := classical.em (∃ (p : Person), ∀ (q : Person), Loves p q),
+  cases r_or_nr with r nr,
+  assumption,
+  -- contradiction somewhere
+end

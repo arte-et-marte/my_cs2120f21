@@ -241,6 +241,8 @@ begin
   cases h with p pf,
   apply exists.intro p _, -- !!! TEST QUESTION !!!
   exact pf e,
+end
+example :
   -- If there's a person, p1, who everyone likes,
   (∃ (p1 : Person), ∀ (p2 : Person), Likes p2 p1) → 
   -- then everyone likes someone
@@ -306,7 +308,7 @@ begin
   -- subcase 1
   assumption,
   -- subcase 2
-  have contra2 : ∃ (p : Person), ¬(Likes p p) := exists.intro p h,
+  have contra2 : (∃ (p : Person), ¬(Likes p p)) := exists.intro p h,
   contradiction,
 end
 
