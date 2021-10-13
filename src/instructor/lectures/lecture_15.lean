@@ -46,6 +46,10 @@ The main point of this example is just
 to remind you exactly how exists.intro
 works. 
 -/
+
+-- **exists intro rule needs (1) some value of a type**
+-- **and (2) a proof that the predicate is satisfied**
+-- **by that value.**
 theorem 
 ex_ev_n (n : ℕ) (pf : ev n) : 
   ∃ (m : ℕ), ev m := 
@@ -90,11 +94,11 @@ Now let's look at an example using Lean.
 In this example we set ou to prove (∃ x, P x -> true) 
 so that we can assume (get into our context a proof 
 of) ∃ x, P x. Our aim isn't to prove true, but to see 
-exactly what we can do with a such a proof. The answer
-is that we can "eliminate" it to get (1) an arbitrary
-but specific (general) value *with a name, such as w*,
-along with a proof that that w has property P: a proof
-of (P w). 
+exactly what we can do with a such a proof. **The answer**
+**is that we can "eliminate" it to get (1) an arbitrary**
+**but specific (general) value *with a name, such as w*,**
+**along with a proof that that w has property P: a proof**
+**of (P w).**
 -/
 
 example : (∃ (m : ℕ), ev m) → true :=   
@@ -104,7 +108,7 @@ begin
                       -- one intro rule, one case,
                       -- with info about the args,
                       -- but no witness *details*.
-  trivial,
+  trivial, -- pf is true, so we can just apply that
 end
 
 /-
@@ -142,8 +146,8 @@ away.
 Fortunately, Lean complains that you are "trying
 to eliminate from a proof to a value of a type, 
 T," where T is not Prop. What Lean is really 
-saying is that you may not derive data values
-from proofs. This restriction is part of Lean's 
+saying is that **you may not derive data values**
+**from proofs.** This restriction is part of Lean's 
 approach to assuring the principle of "proof
 irrelevance." Any proof is as good as any other,
 and equivalent in all respects. If we could get 
