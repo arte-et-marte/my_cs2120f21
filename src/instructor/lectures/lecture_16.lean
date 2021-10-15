@@ -20,10 +20,10 @@ the applicable operations.
 /- OBJECTS 
 
 The objects of this algebraic structure are 
-values of type "set T," where T is the type
+values of type "set T," where T is the type **set: a collection of objects of some kind**
 of objects "in" the set: of the "members" of 
 the set. 
-
+**Operations that can be performed on sets: unions, intersections, creating a power set, complement of a set, subset**
 For example, consider the set, written in 
 what's caledl display notation: { 1, 2, 3, 4 }.
 The set has four members, as enumerated here.
@@ -46,11 +46,19 @@ include the following:
 empty set -- containing no elements of type T
 complete set -- containing all T-valued elts
 membership (s : set T) (val : T) : is member?
-complement (s : set T) : set T  -- not in s
-union (s1 s2 : set T) : set T   -- in either
-intersection (s1 s2 : set T) : set T -- in both
+complement (s : set T) : set T  -- not in s **is whatever that's not in the set**
+union (s1 s2 : set T) : set T   -- in either **no multiplicity, an object is either in a set or not / union = "contains"**
+intersection (s1 s2 : set T) : set T -- in both **what's in both/all sets is included in the intersection**
 product (s1 : set T) (s2 : set V) : set (T × V)
-power (s : set T) : set (set T) -- set of subsets
+power (s : set T) : set (set T) -- set of subsets **power set of a given set, s: all the possible sets that could be made from the elements of that set, set of all possible subsets**
+**subset: if an element is in s, it is in S (can think of it as an implication), but a subset doesn't have to necessarily be smaller, it can be the whole set**
+**membership**
+**empty set is a subset of a single value set**
+**type of the power set of {1, 2, 3}: set of set of natural number**
+**adding 1 more element to a set doubles the size of the power set**
+**product of two sets: the set of ordered pairs; nice cat, mean cat, nice dog, mean dog**
+**how many elements in product set: m x n (product of the sizes of the two sets)**
+**{n : ℕ | n % 2 = 0} set is defined by a predicate: type of this set (nat → Prop)**
 -/
 
 /- CHANGE IN PERSPECTIVE!
@@ -62,11 +70,13 @@ a fundamental shift in perspective, one
 that builds on everything we've learned
 so far.
 
-We will now think of a set defined by
-the property that distinguishes objects
-that are in the set from those that are
-not. 
+We will **now think of a set defined by**
+**the property that distinguishes objects**
+**that are in the set from those that are**
+**not.** s set of all sets that don't contain themselves, does s contain itself, whether it does or not, driven to conclusion that it does not
 -/
+
+-- **sets can range from 0 (empty) to all objects of the collection**
 
 def s1 : set ℕ := { n : ℕ | n = 0 }
 
