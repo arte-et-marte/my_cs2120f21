@@ -1,3 +1,5 @@
+-- set is defined by a membership predicate; in Lean, a set is just a predicate
+
 import data.set
 
 /-
@@ -26,32 +28,38 @@ set T rather than T → Prop to specify
 the type of a set value.
 -/
 
-def empte : set ℕ := { n : ℕ | _ }
+/-
+Display notation:
+pair of curly braces with members of the set between
+def one_to_four : set ℕ := {1, 2, 3, 4}
+-/
+-- Comprehension notation:
+-- a set of natural #s, such that...
+def empte : set ℕ := { n : ℕ | false } -- want the pred./prop. to be false for every n, natural # SO JUST PUT FALSE!
 
-def complete : set ℕ := { n : ℕ | _ }
+def complete : set ℕ := { n : ℕ | true }
 
-def evens : set ℕ := { n : ℕ | true }
+def evens : set ℕ := { n : ℕ | ev n } -- or n%2=0
 
-def ods : set ℕ := { n : ℕ | true }
+def ods : set ℕ := { n : ℕ | od n }
 
-def evens_union_ods : set ℕ := { n : ℕ | _ }
+def evens_union_ods : set ℕ := { n : ℕ | ev n ∨ od n }
 
-def evens_intersect_ods : set ℕ  := { n : ℕ | _ }
+def evens_intersect_ods : set ℕ  := { n : ℕ | ev n ∧ od n }
 
-def evens_complement : set ℕ := { n : ℕ | _ }
+def evens_complement : set ℕ := { n : ℕ | ¬ ev n } -- or odd n
 
-def ods_complement : set ℕ := { n : ℕ | _ }
+def ods_complement : set ℕ := { n : ℕ | ¬ od n }
 
-def evens_intersect_empty : set ℕ := _
+def evens_intersect_empty : set ℕ := { n : ℕ | ev n ∧ false} -- or ev n ∧ n ∈ empte
 
-def evens_intersect_complete : set ℕ := _
+def evens_intersect_complete : set ℕ := {n : ℕ | ev n ∧ true } -- or ev n ∧ n ∈ complete or just ev n
 
-def evens_union_empty : set ℕ := _
+def evens_union_empty : set ℕ := {n : ℕ | ev n ∨ n ∈ empte} -- or just ev n
 
-def evens_union_complete : set ℕ := _
+def evens_union_complete : set ℕ := {n : ℕ | ev n ∧ true} -- or just true
 
 -- fill in additional interesting combinations
-
 
 /-
 SET THEORY NOTATIONS
@@ -77,6 +85,10 @@ of values.
 #check 0 ∈ evens
 #check 1 ∈ evens
 
+-- type of "ev": a predicate (ℕ → Prop, {n : ℕ | n % 2 = 0})
+-- ev 3 and 3 ∈ {...} mean the same thing.
+-- {n : ℕ | n=1 ∨ n=2 ∨ n=3 ∨ n=4}
+
 /- set difference
 
 The difference between sets s1 and s2, 
@@ -87,10 +99,10 @@ elements in s2 "taken away." Sometimes
 people use subtraction notation for
 set difference: s1 - s2.
 -/
-#check evens \ ods
-#check evens \ evens
-#check evens \ empte
-#check evens \ complete
+#check evens \ ods -- evens
+#check evens \ evens -- empty
+#check evens \ empte -- evens
+#check evens \ complete -- empty
 
 
 /- complement
@@ -140,9 +152,9 @@ In Lean we have to define it ourselves.
 -/
 
 def prodset {T V : Type} (s1 : set T) (s2 : set V) := 
-  { pr : T × V | pr.1 ∈ s1 ∧ pr.2 ∈ s2 }
+  { pr : T × V | pr.1 ∈ s1 ∧ pr.2 ∈ s2 } -- t cross v ordered pair (t, v)
 
-#check prodset evens empte
+#check prodset evens empte -- empty of type nat cross
 #check prodset evens ods 
 
 
