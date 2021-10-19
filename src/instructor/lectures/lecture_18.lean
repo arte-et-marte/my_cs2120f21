@@ -1,5 +1,5 @@
 import data.set
-
+-- memorize all defs in this file.
 /-
 Up to now we have mostly used our 
 intuition to understand operations
@@ -98,7 +98,7 @@ also in s₂, so s₁ is a subset of s₂.
 -/
 def subset (s₁ s₂ : set α) :=
 ∀ ⦃a : α⦄, a ∈ s₁ → a ∈ s₂
-
+-- forall obj/thing a of type α/some set α, if a is in s1 (a satisfies predicate 1), then a is in s2 (a satisfies predicate s2)
 /-
 You can read the curly braces in
 ⦃a : α⦄ as if they were ordinary 
@@ -122,7 +122,7 @@ satisfy p.
 -/
 def sep (p : α → Prop) (s : set α) : set α :=
 {a | a ∈ s ∧ p a}
-
+-- sep is_prime evens , returns a, the even #s that are prime
 /-
 Exercise: Given the assumptions that 
 evens and primes are sets of natural
@@ -211,7 +211,8 @@ member of the set.
 
 def univ : set α :=
 λ a, true
-
+-- lambda notation / type theory / functional programming, a way of writing a function wo giving it name, a function that
+-- takes argument a and returns proposition true (every value satisfies this predicate)
 /-
 We can even start to define functions that
 look a little like "imperative" operations,
@@ -224,7 +225,7 @@ and the new value as its members.
 
 def insert (a : α) (s : set α) : set α :=
 {b | b = a ∨ b ∈ s}
-
+-- what set of values do i get back? b - contains element a and all of the original elements
 -- example
 def primes_and_15 := insert 15 primes
 
@@ -237,7 +238,7 @@ a.
 -/
 
 def singleton (a : α) : (set α) := 
-  {b | b = a}
+  {b | b = a} -- all b's such that b  is equal to a; know that b = a
 
 /-
 Now we come to the standard operators on
@@ -285,7 +286,7 @@ idea of subtraction, where, for example,
 -/
 
 def diff (s t : set α) : set α :=
-{ a | a ∈ s ∧ a ∉ t }
+{a | a ∈ s ∧ a ∉ t} { a | a ∈ s ∧ a ∉ t }
 
 /-
 Powerset
@@ -308,7 +309,7 @@ to every value in s.
 -/
 
 def image (f : α → β) (s : set α) : set β :=
-{b | ∃ a, a ∈ s ∧ f a = b}
+{b | ∃ a, a ∈ s ∧ f a = b} -- b obj of type β; for which there is exists some a for which that a is in a AND
 
 /-
 The formal definition sort of goes to a 
