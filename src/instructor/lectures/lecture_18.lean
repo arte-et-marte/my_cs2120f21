@@ -42,7 +42,7 @@ use α and β as arguments without
 having to introduce them explicitly
 in each definition. The way it works
 is that if α appears in a definition,
-Lean will silently add "∀ {α : Type}"
+Lean will silently add "∀ {α : Type}" **forall of type α**
 as an argument to the definition.
 -/ 
 
@@ -83,7 +83,7 @@ notation a ∈ s := mem a s
 notation a ∉ s := ¬ (mem a s)
 
 /-
-We can now formally define what we
+We can now formally define what we **subset**
 mean when we say that a set, s₁, is
 a subset of a set, s₂: that if any
 value, a, is in s₁ then it is also
@@ -130,23 +130,25 @@ numbers, write an expression for the
 subset of evens that are also prime.
 -/
 axioms (evens primes : ℕ → Prop)
-def even_primes : set ℕ := _
-
+def even_primes (n : ℕ) : set ℕ := {n | n ∈ evens ∧ n ∈ primes}
+-- got my predicates, need a value of the type that the predicates ask for, need the curly braces notation
 /- 
 Exercises: 
 
 1) Express sep evens primes in English
 
--- answer
+if a of type α is in s and satisfies the predicate p, then a is a member of the new set
+
+s : set α = primes? (ℕ → Prop) --- so, we're saying that "something → Prop" is the same thing as "set something"
 
 2) Assume that evens really is the set
 of even natural numbers and primes is 
 the set of prime numbers. What set of
 values is in even_primes? 
 -/
-
+-- Empty? (Primes are #s whose factors are only 1 and itself. Evens will also always be divisible by two and something else.)
 /-
-The empty set of values of any given
+The empty set of values of any given **empty**
 type is defined by the predicate that
 is false for each value of that type.
 
@@ -193,6 +195,7 @@ of
  FIX
 -/
 
+-- λ (a : α), false = "ANY function that takes a, returns false." **lambda**
 def empty_set' : set α := 
   λ (a : α), false
 
@@ -202,7 +205,7 @@ def φ := empty_set α
 #check empty_set α
 
 /-
-The complete, or *universal* set of values
+The complete, or *universal* set of values **complete**
 of a type α is defined similarly, but now
 we use a proposition that is true for every
 value, making every value of a given type a
@@ -250,7 +253,7 @@ in the resulting set if and only if it's
 in one of the contributing sets. 
 -/
 
-def union (s₁ s₂ : set α) : set α :=
+def union (s₁ s₂ : set α) : set α := --**given two sets, we make a new set of type (set α) where its values a must be in the first set or the second set**
 {a | a ∈ s₁ ∨ a ∈ s₂}
 
 notation s ∪ t := union s t 
