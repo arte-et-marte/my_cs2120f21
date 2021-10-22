@@ -15,33 +15,34 @@ begin
   show ∀ n, n = 0 ∨ n = 2 → n ∈ evens,
   -/
   assume n,
-  assume h,
-  cases h,
+  assume h, -- n is in the set {0, 2} if n is 0 OR n is 2 (a disjunction you can apply cases to!)
+  cases h, -- what can you do with a proof of equality? substitutability; rw
   -- case: n = 0
-  rw h,
-  /-
+  rw h, -- for 0 ∈ evens to be true, evens 0 should be true; what's evens 0? ->
+  --/-
   unfold evens,
-  show {n : ℕ | n % 2 = 0} 0,
-  show 0 % 0 = 0,
-  -/
+  show {n : ℕ | n % 2 = 0} 0, -- replace evens in evens 0 to be its unraveled form
+  show 0 % 2 = 0,
+  ---/
   exact rfl,
   -- case: n = 2
   cases h,
-  /-
+  --/-
   show 2 ∈ evens,
   show evens 2,
   unfold evens,
   show 2 % 2 = 0,
-  -/
+  ---/
   exact rfl,
 end
+/-s-/
 
 /-
 We now look at the concept of *equality* 
 of sets. To show that two sets are equal,
 e.g., L = X, we need to show that a value
 is in L if and only if it's in X. This is
-the same as showing L ⊆ X ∧ X ⊆ L. This
+the same as showing L ⊆ X ∧ X ⊆ L. This **to prove subsets equal, show that they are subsets of each other**
 in turn means 
   ∀ x, 
     (x ∈ L → x ∈ X) ∧
@@ -50,13 +51,13 @@ which we can also write as
   ∀ x, x ∈ L ↔ x ∈ X.
 Now to get from a proof of that to a proof
 of L = X requires a new axiom, the axiom 
-of set extensionality. It just says that 
+of **set extensionality**. It just says that 
 if we prove ∀ x, x ∈ L ↔ x ∈ X then we 
 can, by applying the axiom, deduce that
 L = X. The set extensionality axiom in 
 Lean is called ext, defined in the set
 namespace; so you can refer to it either
-as set.ext, or you can open the set
+as **set.ext** (apply this to a proof of the above), or you can open the set
 namepace and then just call it ext. 
 -/
 #check @set.ext 
@@ -64,8 +65,8 @@ namepace and then just call it ext.
 /-
 Remember that you can think about an
 implication, P → Q, in two ways: first,
-if P then Q; second, to prove P it will
-suffice to prove Q. So to prove L = X, 
+if P then Q; second, to prove Q it will
+suffice to prove P. So to prove L = X, 
 it suffices to prove ∀ x, x ∈ L ↔ x ∈ X,
 because one can then apply ext to that
 proof to derive a proof of L = X. In 
@@ -87,6 +88,7 @@ begin
   -- that's the whole proof as long as we can fill in the _
   -- but now that's just ordinary logical reasoning
   assume x,
+  -- apply iff.intro _ _,
   split,
   -- forward
   assume h,
